@@ -1,0 +1,54 @@
+class Vertice:
+      def _init_(self, nombre):
+    self.nombre = nombre
+    self.vecinos = {}
+  
+  def agregarVecino(self, vecino, peso=0):
+    self.vecinos[vecino] = peso
+  
+  def _str_(self):
+    return f"{self.nombre}"
+
+class Grafo:
+  def _init_(self):
+    self.vertices = {}
+  
+  def agregarVertice(self, vertice):
+    self.vertices[vertice.nombre] = vertice
+  
+  def agregarArista(self, desde, hasta, peso=0):
+    if desde not in self.vertices:
+      self.agregarVertice(Vertice(desde))
+    if hasta not in self.vertices:
+      self.agregarVertice(Vertice(hasta))
+    self.vertices[desde].agregarVecino(self.vertices[hasta], peso)
+    self.vertices[hasta].agregarVecino(self.vertices[desde], peso)
+  
+  def obtenerVertice(self, nombre):
+    if nombre in self.vertices:
+      return self.vertices[nombre]
+    return None
+  
+  def arbolExpansionMinimaKruskal(self):
+    arbol = Grafo()
+    aristas = []
+    for vertice in self.vertices.values():
+      for vecino, peso in vertice.vecinos.items():
+        aristas.append((peso, vertice, vecino))
+    aristas = sorted(aristas)
+    conjuntos = {vertice: vertice.nombre for vertice in self.vertices.values()}
+    for peso, vertice, vecino in aristas:
+      if conjuntos[vertice] != conjuntos[vecino]:
+          arbol.agregarArista(vertice.nombre, vecino.nombre, peso)
+      for vertice in conjuntos:
+        if conjuntos[vertice] == conjuntos[vecino]:
+            conjuntos[vertice] = conjuntos[vertice]
+        return arbol
+  def _str_(self):
+    s = ""
+    for vertice in self.vertices.values():
+        s += f"{vertice.nombre} -> {vertice.vecinos.keys()} -> {vertice.vecinos.values()}n"
+    return s
+  def generarGrafo(self, n, m):
+    for i in range(n):
+      self.agregarVertice(Vertice(i))

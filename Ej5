@@ -1,0 +1,19 @@
+def hijosSinAmor(mochila,iteracion=0):
+    if not mochila:
+        print("Mochila vacía")
+    if (mochila[iteracion]=="anillo de poder"):
+        objetos= iteracion+1
+        print("Felicidades, la mochila si que contiene un anillo de poder, se ha conseguido sacar tras sacar " + str(objetos)  + " objetos")
+
+    elif ((iteracion+1)== len(mochila)):
+        print("No encontrado")
+        return encontrado,iteracion
+    else:
+        hijosSinAmor(mochila,iteracion+1)
+
+
+mochila=["Z","H","anillo de poder","L"]
+mochila2=["Z","Z","h","Z"]
+
+encontrado= hijosSinAmor(mochila)
+encontrado= hijosSinAmor(mochila2)

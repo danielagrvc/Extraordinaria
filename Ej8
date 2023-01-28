@@ -1,0 +1,65 @@
+import sys
+import heapq
+import collections
+import numpy as np
+def huffman( ):
+    freq_table = {'A':0.2, 'F':0.17, '1':0.13, '3':0.21, '0':0.05, 'M':0.09, 'T':0.15}
+    #ordenar de menor a mayor
+    sorted_freq = sorted(freq.items(), key=lambda x: x[1])
+
+    #crear arbol
+    heap = [[wt, [sym, ""]] for sym, wt in sorted_freq]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        lo = heapq.heappop(heap)
+        hi = heapq.heappop(heap)
+        for pair in lo[1:]:
+            pair[1] = '0' + pair[1]
+        for pair in hi[1:]:
+            pair[1] = '1' + pair[1]
+        heapq.heappush(heap, [lo[0] + hi[0]] + lo[1:] + hi[1:])
+
+    #Imprimir arbol:
+    print("Arbol de Huffman:")
+    for p in sorted(heapq.heappop(heap)[1:], key=lambda p: (len(p[-1]), p)):
+        print("%s\t%s" % (p[0], p[1]))
+    #descodificar mensaje
+    mensaje1 = "12535226545541556666"
+    mensaje2 = "55598856985566698777"
+    print("Mensaje 1: ", mensaje1)
+    print("Mensaje 2: ", mensaje2)
+    print("Mensaje 1 descodificado: ", descodificar(mensaje1))
+    print("Mensaje 2 descodificado: ", descodificar(mensaje2))
+
+    #Hola Ruben, ahora a calcular el espacio de memoria
+    print("Espacio de memoria original: ", sys.getsizeof("Tengo las alas, tengo las ganas"))
+    print("Espacio de memoria comprimido: ", sys.getsizeof(mensaje1+mensaje2))
+def descodificar(mensaje):
+    #La frecuencia de cada caracter
+    freq = {'A':0.2, 'F':0.17, '1':0.13, '3':0.21, '0':0.05, 'M':0.09, 'T':0.15}
+    #A ordenar de menor a mayor
+    sorted_freq = sorted(freq.items(), key=lambda x: x[1])
+    #Por ultimo voy a crear un rear arbol
+    heap = [[wt, [sym, ""]] for sym, wt in sorted_freq]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        lo = heapq.heappop(heap)
+        hi = heapq.heappop(heap)
+        for pair in lo[1:]:
+            pair[1] = '0' + pair[1]
+        for pair in hi[1:]:
+            pair[1] = '1' + pair[1]
+        heapq.heappush(heap, [lo[0] + hi[0]] + lo[1:] + hi[1:])
+    #Descodificar mensaje
+    code = dict(heapq.heappop(heap)[1:])
+    decoded = ""
+    temp = ""
+    for bit in mensaje:
+        temp += bit
+        for dec in code:
+            if (temp == code[dec]):
+                decoded += dec
+                temp = ""
+    return decoded 
+   
+huffman()
